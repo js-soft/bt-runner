@@ -5,4 +5,6 @@ RUN apt update -y && apt upgrade -y
 RUN apt install -y -f ./google-chrome-stable_current_amd64.deb
 RUN rm -f google-chrome-stable_current_amd64.deb
 
+RUN npm i -g chromedriver
+
 WORKDIR /usr/app
