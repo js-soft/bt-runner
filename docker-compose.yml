@@ -1,0 +1,9 @@
+version: "3.7"
+
+services:
+    # add a dependency here (e.g. database, ..)
+    tests:
+        image: jkoenig134/node_browsertest
+        command: "npm run test"
+        volumes:
+            - ./:/usr/app
