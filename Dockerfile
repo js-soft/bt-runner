@@ -4,3 +4,5 @@ RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.d
 RUN apt update -y && apt upgrade -y
 RUN apt install -y -f ./google-chrome-stable_current_amd64.deb
 RUN rm -f google-chrome-stable_current_amd64.deb
+
+WORKDIR /usr/app
