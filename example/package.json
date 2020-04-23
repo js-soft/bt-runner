@@ -1,0 +1,25 @@
+{
+    "name": "example",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "prep": "npm install && tsc",
+        "test": "npm run prep && npm run test:node && npm run test:web",
+        "test:node": "mocha -r ts-node/register -r tsconfig-paths/register ./test/test.ts --project ./tsconfig.json --exit",
+        "test:web": "node nightwatch.js"
+    },
+    "author": "js-soft <julian.koenig@js-soft.com> (https://www.js-soft.com/)",
+    "license": "MIT",
+    "dependencies": {},
+    "devDependencies": {
+        "@types/chai": "^4.2.11",
+        "@types/mocha": "^7.0.2",
+        "chai": "^4.2.0",
+        "express": "^4.17.1",
+        "nightwatch": "^1.3.4",
+        "ts-node": "^8.9.0",
+        "tsconfig-paths": "^3.9.0",
+        "typescript": "^3.8.3"
+    }
+}

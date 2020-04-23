@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Mocha Tests</title>
+        <link rel="stylesheet" href="/mocha/mocha.css" />
+    </head>
+
+    <body>
+        <div id="mocha"></div>
+        <script src="/mocha/mocha.js"></script>
+        <script src="/chai/chai.js"></script>
+        <script>
+            mocha.setup("bdd")
+            mocha.reporter("list")
+        </script>
+        <script src="/test/test.js"></script>
+
+        <script></script>
+        <div id="main">Test</div>
+    </body>
+</html>

@@ -6,4 +6,4 @@ services:
         image: jkoenig134/node_browsertest
         command: "npm run test"
         volumes:
-            - ./:/usr/app
+            - ./example:/usr/app
