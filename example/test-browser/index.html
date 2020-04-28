@@ -7,11 +7,17 @@
 
     <body>
         <div id="mocha"></div>
+        <script>
+            window.logs = []
+            console.log = function () {
+                window.logs.push(Array.from(arguments))
+            }
+        </script>
         <script src="/mocha/mocha.js"></script>
         <script src="/chai/chai.js"></script>
         <script>
             mocha.setup("bdd")
-            mocha.reporter("list")
+            mocha.reporter("spec")
         </script>
         <script src="/test/test.js"></script>
 

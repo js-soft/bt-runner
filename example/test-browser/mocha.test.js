@@ -12,20 +12,26 @@ describe("Browser Mocha Tests", function () {
 
     it("Should run the Mocha tests without error", (client) => {
         client.waitForElementVisible("#main")
-        client.timeoutsAsyncScript(200000)
-        client.executeAsync(
+        client.timeoutsAsyncScript(200000).executeAsync(
             function (done) {
                 var mocha = window.mocha
                 if (!mocha) return false
                 mocha.run(function (failures) {
-                    done(failures)
+                    done({ failures: failures, logs: logs })
                 })
                 return true
             },
             [],
             (result) => {
-                console.log(result)
-                expect(result.value).to.equal(0)
+                console.log("\n--- browser mocha output ---")
+
+                for (const logs of result.value.logs) {
+                    console.log.apply(null, logs)
+                }
+
+                console.log("--- finished browser mocha output ---")
+
+                expect(result.value.failures).to.equal(0)
             }
         )
     })
