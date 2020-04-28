@@ -17,8 +17,8 @@ function requireGlobal(packageName) {
 
 module.exports = (function (settings) {
     settings = {
-        src_folders: ["./test-browser/"],
-        exclude: ["./test-browser/server.js"],
+        src_folders: ["./"],
+        exclude: ["./server.js"],
 
         webdriver: {
             start_process: true,

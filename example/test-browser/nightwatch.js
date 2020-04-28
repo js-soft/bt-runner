@@ -1,7 +1,7 @@
 var nightwatch = require("nightwatch")
 var child_process = require("child_process")
 
-var httpServerProc = child_process.spawn("node", ["test-browser/server.js"], {
+var httpServerProc = child_process.spawn("node", ["server.js"], {
     stdio: "inherit",
 })
 

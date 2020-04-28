@@ -1,4 +1,4 @@
 node_modules
 example/test/**/*.js
-example/chromedriver.log
+example/test-browser/chromedriver.log
 example/package-lock.json
