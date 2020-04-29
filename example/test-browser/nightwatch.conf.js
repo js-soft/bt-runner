@@ -17,8 +17,8 @@ function requireGlobal(packageName) {
 
 module.exports = (function (settings) {
     settings = {
-        src_folders: ["./"],
-        exclude: ["./server.js"],
+        src_folders: ["./test-browser"],
+        filter: "*.test.js",
 
         webdriver: {
             start_process: true,
@@ -30,7 +30,7 @@ module.exports = (function (settings) {
             type: "mocha",
             options: {
                 ui: "bdd",
-                reporter: "list",
+                reporter: "spec",
             },
         },
 
@@ -63,4 +63,4 @@ module.exports = (function (settings) {
     settings.webdriver.server_path = requireGlobal("chromedriver").path
 
     return settings
-})(require("./nightwatch.json"))
+})()
