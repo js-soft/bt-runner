@@ -14,13 +14,18 @@ describe("Browser Mocha Tests", function () {
         client.waitForElementVisible("#main")
         client.timeoutsAsyncScript(200000).executeAsync(
             function (done) {
-                var mocha = window.mocha
-                if (!mocha) return false
+                const mocha = window.mocha
+
+                //add required test librarys in this if statement
+                if (!mocha) {
+                    logs.push(["Required library not loaded.\nAborting..."])
+                    done({ failures: 1, logs: logs })
+                    return
+                }
 
                 mocha.run(function (failures) {
                     done({ failures: failures, logs: logs })
                 })
-                return true
             },
             [],
             (result) => {
