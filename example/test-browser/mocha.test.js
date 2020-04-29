@@ -16,6 +16,7 @@ describe("Browser Mocha Tests", function () {
             function (done) {
                 var mocha = window.mocha
                 if (!mocha) return false
+
                 mocha.run(function (failures) {
                     done({ failures: failures, logs: logs })
                 })
