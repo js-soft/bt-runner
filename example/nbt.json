@@ -1,0 +1,8 @@
+{
+    "testFolder": "./test",
+    "runners": [
+        {
+            "dependencies": ["test.js"]
+        }
+    ]
+}
