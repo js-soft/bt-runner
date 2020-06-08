@@ -5,12 +5,12 @@ export interface IRunner {
     dependencies: string[]
 }
 
-export function generate(runners: IRunner[]): string {
+export function generate(runners: IRunner[], additionalScripts: string[] | undefined): string {
     const outputPath = fs.mkdtempSync(path.join(__dirname, "..", "tmp", "browsertests-"))
 
     let it = 1
     for (const runner of runners) {
-        writeHtml(outputPath, it, runner.dependencies)
+        writeHtml(outputPath, it, runner.dependencies, additionalScripts)
         writeTestFile(outputPath, it)
         it++
     }
@@ -20,7 +20,12 @@ export function generate(runners: IRunner[]): string {
     return outputPath
 }
 
-function writeHtml(outputPath: string, iteration: number, dependencies: string[]) {
+function writeHtml(
+    outputPath: string,
+    iteration: number,
+    dependencies: string[],
+    additionalScripts: string[] | undefined
+) {
     let html = `<!DOCTYPE html>
 <html>
     <head>
@@ -41,6 +46,9 @@ function writeHtml(outputPath: string, iteration: number, dependencies: string[]
             mocha.setup("bdd")
             mocha.reporter("spec")
         </script>
+        <script>
+            %additionalScript%
+        </script>
 %dependencies%
 
         <div id="main">Test</div>
@@ -50,6 +58,8 @@ function writeHtml(outputPath: string, iteration: number, dependencies: string[]
         "%dependencies%",
         dependencies.map((dependency) => `        <script src="/test/${dependency}"></script>`).join("\n")
     )
+
+    html = html.replace("%additionalScript%", additionalScripts ? additionalScripts.join("\n") : "")
 
     fs.writeFileSync(path.join(outputPath, `index${iteration}.html`), html)
 }

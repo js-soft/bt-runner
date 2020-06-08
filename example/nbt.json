@@ -4,5 +4,6 @@
         {
             "dependencies": ["test.js"]
         }
-    ]
+    ],
+    "additionalScripts": ["console.log(\"I am Here\")"]
 }
