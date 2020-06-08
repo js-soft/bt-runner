@@ -1,11 +1,10 @@
 {
     "name": "bt-runner",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "",
     "main": "index.js",
     "scripts": {
-        "test": "ts-node generator.ts",
-        "prepublish": ""
+        "prepublish": "tsc"
     },
     "bin": {
         "browsertest-runner": "dist/index.js"

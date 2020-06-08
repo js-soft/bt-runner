@@ -35,8 +35,8 @@ function writeHtml(outputPath: string, iteration: number, dependencies: string[]
                 window.logs.push(Array.from(arguments))
             }
         </script>
-        <script src="/mocha/mocha.js"></script>
-        <script src="/chai/chai.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/7.2.0/mocha.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/4.2.0/chai.min.js"></script>
         <script>
             mocha.setup("bdd")
             mocha.reporter("spec")
