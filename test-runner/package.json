@@ -1,18 +1,20 @@
 {
     "name": "bt-runner",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "",
     "main": "index.js",
     "scripts": {
         "prepublish": "tsc"
     },
     "bin": {
-        "browsertest-runner": "dist/index.js"
+        "browsertest-runner": "dist/index.js",
+        "browsertest-runner-debug": "dist/index_debug.js"
     },
     "author": "js-soft <julian.koenig@js-soft.com> (https://www.js-soft.com/)",
     "license": "ISC",
     "devDependencies": {
         "@types/express": "^4.17.6",
+        "@types/express-http-proxy": "^1.6.1",
         "@types/node": "^14.0.10",
         "@types/rimraf": "^3.0.0"
     },
