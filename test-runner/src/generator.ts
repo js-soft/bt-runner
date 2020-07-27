@@ -31,7 +31,7 @@ function writeHtml(
     additionalScripts: string[] | undefined,
     debug: boolean
 ) {
-    let html = `<!DOCTYPE html>
+    const html = `<!DOCTYPE html>
 <html>
     <head>
         <title>Mocha Tests</title>
@@ -40,7 +40,18 @@ function writeHtml(
     <body>
         <div id="mocha"></div>
         
-        %logging%
+        ${
+            debug
+                ? ""
+                : `
+        <script>
+            window.logs = []
+            console.log = function () {
+                window.logs.push(Array.from(arguments))
+            }
+        </script>
+        `
+        }
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/7.2.0/mocha.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/4.2.0/chai.min.js"></script>
@@ -49,35 +60,14 @@ function writeHtml(
             mocha.reporter("spec")
         </script>
         <script>
-            %additionalScript%
+            ${additionalScripts ? additionalScripts.join("\n") : ""}
         </script>
-%dependencies%
+        
+        ${dependencies.map((dependency) => `        <script src="/test/${dependency}"></script>`).join("\n")}
 
         <div id="main">Test</div>
     </body>
 </html>`
-    html = html.replace(
-        "%dependencies%",
-        dependencies.map((dependency) => `        <script src="/test/${dependency}"></script>`).join("\n")
-    )
-
-    if (!debug) {
-        html = html.replace(
-            "%logging%",
-            `
-        <script>
-            window.logs = []
-            console.log = function () {
-                window.logs.push(Array.from(arguments))
-            }
-        </script>
-        `
-        )
-    } else {
-        html = html.replace("%logging%", "")
-    }
-
-    html = html.replace("%additionalScript%", additionalScripts ? additionalScripts.join("\n") : "")
 
     fs.writeFileSync(path.join(outputPath, `index${iteration}.html`), html)
 }
