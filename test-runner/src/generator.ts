@@ -5,17 +5,21 @@ export interface IRunner {
     dependencies: string[]
 }
 
-export function generate(runners: IRunner[], additionalScripts: string[] | undefined): string {
+export function generate(runners: IRunner[], additionalScripts: string[] | undefined, debug: boolean = false): string {
     const outputPath = fs.mkdtempSync(path.join(__dirname, "..", "tmp", "browsertests-"))
 
     let it = 1
     for (const runner of runners) {
-        writeHtml(outputPath, it, runner.dependencies, additionalScripts)
-        writeTestFile(outputPath, it)
+        writeHtml(outputPath, it, runner.dependencies, additionalScripts, debug)
+        if (!debug) {
+            writeTestFile(outputPath, it)
+        }
         it++
     }
 
-    writeConfig(outputPath)
+    if (!debug) {
+        writeConfig(outputPath)
+    }
 
     return outputPath
 }
@@ -24,7 +28,8 @@ function writeHtml(
     outputPath: string,
     iteration: number,
     dependencies: string[],
-    additionalScripts: string[] | undefined
+    additionalScripts: string[] | undefined,
+    debug: boolean
 ) {
     let html = `<!DOCTYPE html>
 <html>
@@ -34,12 +39,9 @@ function writeHtml(
 
     <body>
         <div id="mocha"></div>
-        <script>
-            window.logs = []
-            console.log = function () {
-                window.logs.push(Array.from(arguments))
-            }
-        </script>
+        
+        %logging%
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/7.2.0/mocha.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/4.2.0/chai.min.js"></script>
         <script>
@@ -58,6 +60,22 @@ function writeHtml(
         "%dependencies%",
         dependencies.map((dependency) => `        <script src="/test/${dependency}"></script>`).join("\n")
     )
+
+    if (!debug) {
+        html = html.replace(
+            "%logging%",
+            `
+        <script>
+            window.logs = []
+            console.log = function () {
+                window.logs.push(Array.from(arguments))
+            }
+        </script>
+        `
+        )
+    } else {
+        html = html.replace("%logging%", "")
+    }
 
     html = html.replace("%additionalScript%", additionalScripts ? additionalScripts.join("\n") : "")
 
