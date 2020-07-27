@@ -2,8 +2,9 @@
     "testFolder": "./test",
     "runners": [
         {
-            "dependencies": ["test.js"]
+            "dependencies": ["test.js"],
+            "globals": ["TEST"]
         }
     ],
-    "additionalScripts": ["console.log(\"I am Here\")"]
+    "additionalScripts": ["window.TEST = {}"]
 }

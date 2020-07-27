@@ -3,6 +3,7 @@ import * as path from "path"
 
 export interface IRunner {
     dependencies: string[]
+    globals: string[]
 }
 
 export function generate(runners: IRunner[], additionalScripts: string[] | undefined, debug: boolean = false): string {
@@ -12,7 +13,10 @@ export function generate(runners: IRunner[], additionalScripts: string[] | undef
     for (const runner of runners) {
         writeHtml(outputPath, it, runner.dependencies, additionalScripts, debug)
         if (!debug) {
-            writeTestFile(outputPath, it)
+            if (!runner.globals) {
+                runner.globals = []
+            }
+            writeTestFile(outputPath, it, runner.globals)
         }
         it++
     }
@@ -72,7 +76,10 @@ function writeHtml(
     fs.writeFileSync(path.join(outputPath, `index${iteration}.html`), html)
 }
 
-function writeTestFile(outputPath: string, iteration: number) {
+function writeTestFile(outputPath: string, iteration: number, globals: string[]) {
+    const joined = globals.join("|| !window.")
+    const globalsString = joined === "" ? "" : `|| !window.${globals}`
+
     const testContent = `const expect = require("chai").expect
 
     describe("Browser Mocha Tests", function () {
@@ -92,7 +99,7 @@ function writeTestFile(outputPath: string, iteration: number) {
                     const mocha = window.mocha
     
                     //add required test librarys in this if statement
-                    if (!mocha) {
+                    if (!mocha ${globalsString}) {
                         logs.push(["Required library not loaded. Aborting..."])
                         done({ failures: 1, logs: logs })
                         return
