@@ -77,8 +77,7 @@ function writeHtml(
 }
 
 function writeTestFile(outputPath: string, iteration: number, globals: string[]) {
-    const joined = globals.join("|| !window.")
-    const globalsString = joined === "" ? "" : `|| !window.${globals}`
+    const globalsString = globals.map((glob) => ` || !window.${glob}`).join("")
 
     const testContent = `const expect = require("chai").expect
 

@@ -3,8 +3,8 @@
     "runners": [
         {
             "dependencies": ["test.js"],
-            "globals": ["TEST"]
+            "globals": ["TEST", "TEST2"]
         }
     ],
-    "additionalScripts": ["window.TEST = {}"]
+    "additionalScripts": ["window.TEST = {}", "window.TEST2 = {}"]
 }
