@@ -18,4 +18,5 @@ if (nbt.proxies) {
     }
 }
 
+console.log("Server Started. Open at http://localhost:7777/test-browser/index1.html.")
 app.listen(7777, () => {})
