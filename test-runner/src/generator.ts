@@ -77,7 +77,15 @@ function writeHtml(
 }
 
 function writeTestFile(outputPath: string, iteration: number, globals: string[]) {
-    const globalsString = globals.map((glob) => ` || !window.${glob}`).join("")
+    const globalsString = globals
+        .map(
+            (glob) => `if (!window.${glob}) {
+            logs.push(["Required library '${glob}' not loaded. Aborting..."])
+            done({ failures: 1, logs: logs })
+            return
+        }`
+        )
+        .join("\n")
 
     const testContent = `const expect = require("chai").expect
 
@@ -98,11 +106,13 @@ function writeTestFile(outputPath: string, iteration: number, globals: string[])
                     const mocha = window.mocha
     
                     //add required test librarys in this if statement
-                    if (!mocha ${globalsString}) {
-                        logs.push(["Required library not loaded. Aborting..."])
+                    if (!mocha) {
+                        logs.push(["Required library 'mocha' not loaded. Aborting..."])
                         done({ failures: 1, logs: logs })
                         return
                     }
+
+                    ${globalsString}
     
                     mocha.run(function (failures) {
                         done({ failures: failures, logs: logs })
