@@ -174,6 +174,9 @@ function writeConfig(outputPath: string) {
 
         test_settings: {
             default: {
+                request_timeout_options: {
+                    timeout: 200000,
+                },
                 desiredCapabilities: {
                     javascriptEnabled: true,
                     acceptSslCerts: true,
@@ -191,6 +194,13 @@ function writeConfig(outputPath: string) {
                     },
                 },
             },
+        },
+        globals: {
+            waitForConditionTimeout: 100000,
+            asyncHookTimeout: 200000,
+            unitTestsTimeout: 100000,
+            customReporterCallbackTimeout: 100000,
+            retryAssertionTimeout: 50000,
         },
     }
 
