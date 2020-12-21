@@ -6,5 +6,6 @@ RUN apt install -y -f ./google-chrome-stable_current_amd64.deb
 RUN rm -f google-chrome-stable_current_amd64.deb
 
 RUN npm i -g --unsafe-perm chromedriver
+RUN apt-get install -y jq
 
 WORKDIR /usr/app
