@@ -6,7 +6,12 @@ export interface IRunner {
     globals: string[]
 }
 
-export function generate(runners: IRunner[], additionalScripts: string[] | undefined, debug: boolean = false): string {
+export function generate(
+    runners: IRunner[],
+    additionalScripts: string[] | undefined,
+    debug: boolean = false,
+    port: number
+): string {
     const outputPath = fs.mkdtempSync(path.join(__dirname, "..", "tmp", "browsertests-"))
 
     let it = 1
@@ -22,7 +27,7 @@ export function generate(runners: IRunner[], additionalScripts: string[] | undef
     }
 
     if (!debug) {
-        writeConfig(outputPath)
+        writeConfig(outputPath, port)
     }
 
     return outputPath
@@ -121,13 +126,16 @@ function writeTestFile(outputPath: string, iteration: number, globals: string[])
                 [],
                 (result) => {
                     console.log("\\n--- browser mocha output ---")
-    
-                    for (const logs of result.value.logs) {
-                        console.log.apply(null, logs)
+
+                    if (result && result.value && result.value.logs) {
+                        for (const logs of result.value.logs) {
+                            console.log.apply(null, logs)
+                        }
                     }
     
                     console.log("--- finished browser mocha output ---")
     
+                    expect(result.value).to.not.be.undefined
                     expect(result.value.failures).to.equal(0)
                 }
             )
@@ -153,7 +161,7 @@ function requireGlobal(packageName: string) {
     return require(main)
 }
 
-function writeConfig(outputPath: string) {
+function writeConfig(outputPath: string, port: number) {
     const settings = {
         src_folders: [outputPath],
         filter: "*.test.js",
@@ -161,7 +169,7 @@ function writeConfig(outputPath: string) {
         webdriver: {
             start_process: true,
             server_path: "",
-            port: 9515,
+            port: port,
         },
 
         test_runner: {

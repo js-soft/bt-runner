@@ -7,7 +7,7 @@ import * as generator from "./generator"
 const app = express()
 
 const nbt = require(path.join(process.cwd(), "nbt.json"))
-const outputPath = generator.generate(nbt.runners, nbt.additionalScripts, true)
+const outputPath = generator.generate(nbt.runners, nbt.additionalScripts, true, 9515)
 
 app.use("/test-browser", express.static(outputPath))
 app.use("/test", express.static(path.resolve(nbt.testFolder)))
