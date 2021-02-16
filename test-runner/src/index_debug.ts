@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import * as express from "express"
-import * as httpproxy from "express-http-proxy"
+import express from "express"
+import httpproxy from "express-http-proxy"
 import * as path from "path"
 import * as generator from "./generator"
 const app = express()
