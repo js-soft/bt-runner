@@ -106,7 +106,7 @@ function writeTestFile(outputPath: string, iteration: number, globals: string[])
     
         it("Should run the Mocha tests without error", (client) => {
             client.waitForElementVisible("#main")
-            client.timeoutsAsyncScript(200000).executeAsync(
+            client.timeoutsAsyncScript(600000).executeAsync(
                 function (done) {
                     const mocha = window.mocha
     
@@ -183,7 +183,7 @@ function writeConfig(outputPath: string, port: number) {
         test_settings: {
             default: {
                 request_timeout_options: {
-                    timeout: 200000,
+                    timeout: 600000,
                 },
                 desiredCapabilities: {
                     javascriptEnabled: true,
@@ -205,7 +205,7 @@ function writeConfig(outputPath: string, port: number) {
         },
         globals: {
             waitForConditionTimeout: 100000,
-            asyncHookTimeout: 200000,
+            asyncHookTimeout: 600000,
             unitTestsTimeout: 100000,
             customReporterCallbackTimeout: 100000,
             retryAssertionTimeout: 50000,

@@ -1,4 +1,3 @@
 node_modules
 example/test/**/*.js
 example/chromedriver.log
-package-lock.json
