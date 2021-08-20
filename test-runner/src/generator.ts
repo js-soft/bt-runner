@@ -106,7 +106,7 @@ function writeTestFile(outputPath: string, iteration: number, globals: string[])
     
         it("Should run the Mocha tests without error", (client) => {
             client.waitForElementVisible("#main")
-            client.timeoutsAsyncScript(600000).executeAsync(
+            client.timeoutsAsyncScript(1500000).executeAsync(
                 function (done) {
                     const mocha = window.mocha
     
@@ -169,21 +169,21 @@ function writeConfig(outputPath: string, port: number) {
         webdriver: {
             start_process: true,
             server_path: "",
-            port: port,
+            port: port
         },
 
         test_runner: {
             type: "mocha",
             options: {
                 ui: "bdd",
-                reporter: "spec",
-            },
+                reporter: "spec"
+            }
         },
 
         test_settings: {
             default: {
                 request_timeout_options: {
-                    timeout: 600000,
+                    timeout: 1500000
                 },
                 desiredCapabilities: {
                     javascriptEnabled: true,
@@ -196,20 +196,20 @@ function writeConfig(outputPath: string, port: number) {
                             "disable-gpu",
                             "ignore-certificate-errors",
                             "no-sandbox",
-                            "disable-features=NetworkService",
+                            "disable-features=NetworkService"
                         ],
-                        binary: "/usr/bin/google-chrome",
-                    },
-                },
-            },
+                        binary: "/usr/bin/google-chrome"
+                    }
+                }
+            }
         },
         globals: {
             waitForConditionTimeout: 100000,
-            asyncHookTimeout: 600000,
+            asyncHookTimeout: 1500000,
             unitTestsTimeout: 100000,
             customReporterCallbackTimeout: 100000,
-            retryAssertionTimeout: 50000,
-        },
+            retryAssertionTimeout: 50000
+        }
     }
 
     //@ts-ignore
