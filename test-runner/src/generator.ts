@@ -55,7 +55,9 @@ function writeHtml(
                 : `
         <script>
             window.logs = []
+            const oldLog = console.log
             console.log = function () {
+                oldLog.apply(console, arguments)
                 window.logs.push(Array.from(arguments))
             }
         </script>
@@ -107,7 +109,7 @@ function writeTestFile(outputPath: string, iteration: number, globals: string[])
         it("Should run the Mocha tests without error", (client) => {
             client.waitForElementVisible("#main")
             client.timeoutsAsyncScript(1500000).executeAsync(
-                function (done) {
+                (_data, done) => {
                     const mocha = window.mocha
     
                     //add required test librarys in this if statement
