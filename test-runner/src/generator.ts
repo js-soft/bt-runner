@@ -88,7 +88,7 @@ function writeTestFile(outputPath: string, iteration: number, globals: string[])
         .map(
             (glob) => `if (!window.${glob}) {
             logs.push(["Required library '${glob}' not loaded. Aborting..."])
-            done({ failures: 1, logs: logs })
+            localDone({ failures: 1, logs: logs })
             return
         }`
         )
@@ -110,19 +110,21 @@ function writeTestFile(outputPath: string, iteration: number, globals: string[])
             client.waitForElementVisible("#main")
             client.timeoutsAsyncScript(1500000).executeAsync(
                 (_data, done) => {
+                    const localDone = typeof _data === "function" ? _data : done
+
                     const mocha = window.mocha
     
                     //add required test librarys in this if statement
                     if (!mocha) {
                         logs.push(["Required library 'mocha' not loaded. Aborting..."])
-                        done({ failures: 1, logs: logs })
+                        localDone({ failures: 1, logs: logs })
                         return
                     }
 
                     ${globalsString}
-    
+                    
                     mocha.run(function (failures) {
-                        done({ failures: failures, logs: logs })
+                        localDone({ failures: failures, logs: logs })
                     })
                 },
                 [],
