@@ -194,13 +194,14 @@ function writeConfig(outputPath: string, port: number) {
                     acceptSslCerts: true,
                     acceptInsecureCerts: true,
                     browserName: "chrome",
-                    chromeOptions: {
+                    "goog:chromeOptions": {
+                        w3c: true,
                         args: [
-                            "headless",
-                            "disable-gpu",
-                            "ignore-certificate-errors",
-                            "no-sandbox",
-                            "disable-features=NetworkService"
+                            "--headless",
+                            "--disable-gpu",
+                            "--ignore-certificate-errors",
+                            "--no-sandbox",
+                            "--disable-features=NetworkService"
                         ],
                         binary: "/usr/bin/google-chrome"
                     }
@@ -218,7 +219,7 @@ function writeConfig(outputPath: string, port: number) {
 
     //@ts-ignore
     if (process.platform === "win32" || process.platform === "win64") {
-        settings.test_settings.default.desiredCapabilities.chromeOptions.binary =
+        settings.test_settings.default.desiredCapabilities["goog:chromeOptions"].binary =
             "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
     }
     settings.webdriver.server_path = requireGlobal("chromedriver").path
