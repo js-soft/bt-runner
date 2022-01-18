@@ -55,7 +55,9 @@ function writeHtml(
                 : `
         <script>
             window.logs = []
+            const oldLog = console.log
             console.log = function () {
+                oldLog.apply(console, arguments)
                 window.logs.push(Array.from(arguments))
             }
         </script>
@@ -86,7 +88,7 @@ function writeTestFile(outputPath: string, iteration: number, globals: string[])
         .map(
             (glob) => `if (!window.${glob}) {
             logs.push(["Required library '${glob}' not loaded. Aborting..."])
-            done({ failures: 1, logs: logs })
+            localDone({ failures: 1, logs: logs })
             return
         }`
         )
@@ -107,20 +109,22 @@ function writeTestFile(outputPath: string, iteration: number, globals: string[])
         it("Should run the Mocha tests without error", (client) => {
             client.waitForElementVisible("#main")
             client.timeoutsAsyncScript(1500000).executeAsync(
-                function (done) {
+                (_data, done) => {
+                    const localDone = typeof _data === "function" ? _data : done
+
                     const mocha = window.mocha
     
                     //add required test librarys in this if statement
                     if (!mocha) {
                         logs.push(["Required library 'mocha' not loaded. Aborting..."])
-                        done({ failures: 1, logs: logs })
+                        localDone({ failures: 1, logs: logs })
                         return
                     }
 
                     ${globalsString}
-    
+                    
                     mocha.run(function (failures) {
-                        done({ failures: failures, logs: logs })
+                        localDone({ failures: failures, logs: logs })
                     })
                 },
                 [],
@@ -190,13 +194,14 @@ function writeConfig(outputPath: string, port: number) {
                     acceptSslCerts: true,
                     acceptInsecureCerts: true,
                     browserName: "chrome",
-                    chromeOptions: {
+                    "goog:chromeOptions": {
+                        w3c: true,
                         args: [
-                            "headless",
-                            "disable-gpu",
-                            "ignore-certificate-errors",
-                            "no-sandbox",
-                            "disable-features=NetworkService"
+                            "--headless",
+                            "--disable-gpu",
+                            "--ignore-certificate-errors",
+                            "--no-sandbox",
+                            "--disable-features=NetworkService"
                         ],
                         binary: "/usr/bin/google-chrome"
                     }
@@ -214,7 +219,7 @@ function writeConfig(outputPath: string, port: number) {
 
     //@ts-ignore
     if (process.platform === "win32" || process.platform === "win64") {
-        settings.test_settings.default.desiredCapabilities.chromeOptions.binary =
+        settings.test_settings.default.desiredCapabilities["goog:chromeOptions"].binary =
             "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
     }
     settings.webdriver.server_path = requireGlobal("chromedriver").path
