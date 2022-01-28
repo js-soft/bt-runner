@@ -7,7 +7,8 @@
         "prep": "npm install && tsc",
         "test": "npm run prep && npm run test:node && npm run test:web",
         "test:node": "mocha -r ts-node/register -r tsconfig-paths/register ./test/test.ts --project ./tsconfig.json --exit",
-        "test:web": "browsertest-runner"
+        "test:web": "browsertest-runner",
+        "test:web:debug": "browsertest-runner-debug"
     },
     "author": "js-soft <julian.koenig@js-soft.com> (https://www.js-soft.com/)",
     "license": "MIT",
