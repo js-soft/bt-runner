@@ -173,7 +173,10 @@ function writeConfig(outputPath: string, port: number) {
         webdriver: {
             start_process: true,
             server_path: "",
-            port: port
+            port: port,
+            timeout_options: {
+                timeout: 1500000
+            }
         },
 
         test_runner: {
