@@ -16,7 +16,7 @@ export function generate(
 
     let it = 1
     for (const runner of runners) {
-        writeHtml(outputPath, it, runner.dependencies, additionalScripts, debug)
+        writeHtml(outputPath, it, runner.dependencies, additionalScripts)
         if (!debug) {
             if (!runner.globals) {
                 runner.globals = []
@@ -37,8 +37,7 @@ function writeHtml(
     outputPath: string,
     iteration: number,
     dependencies: string[],
-    additionalScripts: string[] | undefined,
-    debug: boolean
+    additionalScripts: string[] | undefined
 ) {
     const html = `<!DOCTYPE html>
 <html>
@@ -48,21 +47,6 @@ function writeHtml(
 
     <body>
         <div id="mocha"></div>
-        
-        ${
-            debug
-                ? ""
-                : `
-        <script>
-            window.logs = []
-            const oldLog = console.log
-            console.log = function () {
-                oldLog.apply(console, arguments)
-                window.logs.push(Array.from(arguments))
-            }
-        </script>
-        `
-        }
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/7.2.0/mocha.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/4.2.0/chai.min.js"></script>
@@ -87,8 +71,8 @@ function writeTestFile(outputPath: string, iteration: number, globals: string[])
     const globalsString = globals
         .map(
             (glob) => `if (!window.${glob}) {
-            logs.push(["Required library '${glob}' not loaded. Aborting..."])
-            localDone({ failures: 1, logs: logs })
+            console.log("Required library '${glob}' not loaded. Aborting...")
+            done({ failures: 1 })
             return
         }`
         )
@@ -106,43 +90,38 @@ function writeTestFile(outputPath: string, iteration: number, globals: string[])
             client.end(() => done())
         })
     
-        it("Should run the Mocha tests without error", (client) => {
+        it("Should run the Mocha tests without error", async (client) => {
+            client.captureBrowserConsoleLogs((event) => {
+                const args = event.args.map((arg) => arg.value)
+                console.log.apply(console, args)
+            })
+
             client.waitForElementVisible("#main")
-            client.timeoutsAsyncScript(1500000).executeAsync(
-                (_data, done) => {
-                    const localDone = typeof _data === "function" ? _data : done
 
-                    const mocha = window.mocha
-    
-                    //add required test librarys in this if statement
-                    if (!mocha) {
-                        logs.push(["Required library 'mocha' not loaded. Aborting..."])
-                        localDone({ failures: 1, logs: logs })
-                        return
-                    }
+            const executeFunction = (done) => {
+                const mocha = window.mocha
 
-                    ${globalsString}
-                    
-                    mocha.run(function (failures) {
-                        localDone({ failures: failures, logs: logs })
-                    })
-                },
-                [],
-                (result) => {
-                    console.log("\\n--- browser mocha output ---")
-
-                    if (result && result.value && result.value.logs) {
-                        for (const logs of result.value.logs) {
-                            console.log.apply(null, logs)
-                        }
-                    }
-    
-                    console.log("--- finished browser mocha output ---")
-    
-                    expect(result.value).to.not.be.undefined
-                    expect(result.value.failures).to.equal(0)
+                //add required test librarys in this if statement
+                if (!mocha) {
+                    console.log("Required library 'mocha' not loaded. Aborting...")
+                    done({ failures: 1 })
+                    return
                 }
-            )
+
+                ${globalsString}
+                
+                mocha.run(function (failures) {
+                    done({ failures: failures })
+                })
+            }
+
+            const result = await new Promise(resolve => client.timeoutsAsyncScript(1500000).executeAsyncScript(
+                executeFunction,
+                (result) => resolve(result)
+            ))
+
+            expect(result.value).to.not.be.undefined
+            expect(result.value.failures).to.equal(0)
         })
     })`
     fs.writeFileSync(path.join(outputPath, `mocha${iteration}.test.js`), testContent)
@@ -227,5 +206,5 @@ function writeConfig(outputPath: string, port: number) {
     }
     settings.webdriver.server_path = requireGlobal("chromedriver").path
 
-    fs.writeFileSync(path.join(outputPath, `nightwatch.json`), JSON.stringify(settings))
+    fs.writeFileSync(path.join(outputPath, "nightwatch.json"), JSON.stringify(settings))
 }
