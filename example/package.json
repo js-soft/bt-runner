@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
+    "private": true,
     "scripts": {
         "prep": "npm install && tsc",
         "test": "npm run prep && npm run test:node && npm run test:web",
