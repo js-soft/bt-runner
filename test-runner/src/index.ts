@@ -32,7 +32,7 @@ async function run() {
     const testFolder = path.resolve(nbt.testFolder)
     const httpServerProc = child_process.spawn("node", [`${__dirname}/../dist/server.js`, tempFolder, testFolder], {
         stdio: "inherit",
-        env: { PORT: port.toString() }
+        env: { ...process.env, PORT: port.toString() }
     })
 
     let exitCode = 0
