@@ -18,5 +18,10 @@ if (nbt.proxies) {
     }
 }
 
-console.log("Server Started. Open at http://localhost:7777/test-browser/index1.html.")
+const urls = (nbt.runners as Array<any>)
+    .map((_runner, number) => `- http://localhost:7777/test-browser/index${number + 1}.html`)
+    .join("\n")
+console.log(`Server Started. Open under the following URL's
+${urls}
+and type "mocha.run()" in the debug console to run the tests.`)
 app.listen(7777, () => {})
