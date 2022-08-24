@@ -1,11 +1,11 @@
 FROM node:lts
 
-RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb 
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 RUN apt update -y && apt upgrade -y
 RUN apt install -y -f ./google-chrome-stable_current_amd64.deb
 RUN rm -f google-chrome-stable_current_amd64.deb
 
-RUN npm i -g --unsafe-perm chromedriver
+RUN npm i -g --unsafe-perm chromedriver npm
 RUN apt-get install -y jq
 
 WORKDIR /usr/app
