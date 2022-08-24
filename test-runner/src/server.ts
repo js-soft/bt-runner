@@ -14,4 +14,4 @@ if (config && config.proxies) {
     }
 }
 
-app.listen(7777, () => {})
+app.listen(process.env["PORT"] ?? 7777, () => {})
