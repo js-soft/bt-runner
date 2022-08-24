@@ -10,6 +10,6 @@ function sleep(ms: number = 500): Promise<void> {
 
 describe("Long running tests", function () {
     it("should do this", async function () {
-        await sleep(6000)
+        await sleep(3000)
     }).timeout(7000)
 })

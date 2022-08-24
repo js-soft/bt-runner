@@ -4,6 +4,10 @@
         {
             "dependencies": ["test.js"],
             "globals": ["TEST", "TEST2"]
+        },
+        {
+            "dependencies": ["test.js"],
+            "globals": ["TEST", "TEST2"]
         }
     ],
     "additionalScripts": ["window.TEST = {}", "window.TEST2 = {}"]
