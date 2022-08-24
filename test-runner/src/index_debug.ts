@@ -3,11 +3,11 @@
 import express from "express"
 import httpproxy from "express-http-proxy"
 import * as path from "path"
-import * as generator from "./generator"
+import generate from "./generate"
 const app = express()
 
 const nbt = require(path.join(process.cwd(), "nbt.json"))
-const outputPath = generator.generate(nbt.runners, nbt.additionalScripts, true, 9515)
+const outputPath = generate(nbt.runners, nbt.additionalScripts)
 
 app.use("/test-browser", express.static(outputPath))
 app.use("/test", express.static(path.resolve(nbt.testFolder)))
@@ -19,7 +19,7 @@ if (nbt.proxies) {
 }
 
 const urls = (nbt.runners as Array<any>)
-    .map((_runner, number) => `- http://localhost:7777/test-browser/index${number + 1}.html`)
+    .map((_runner, index) => `- http://localhost:7777/test-browser/index${index + 1}.html`)
     .join("\n")
 console.log(`Server Started. Open under the following URL's
 ${urls}
