@@ -1,6 +1,6 @@
 import * as fs from "fs"
 import * as path from "path"
-import { IRunner } from "./IRunner"
+import { IRunner } from "./Config"
 
 export default function generate(runners: IRunner[], additionalScripts: string[] | undefined): string {
     const outputPath = fs.mkdtempSync(path.join(__dirname, "..", "tmp", "browsertests-"))

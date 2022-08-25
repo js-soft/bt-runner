@@ -1,17 +1,26 @@
 import express from "express"
-import path = require("path")
-const app = express()
+import { Server } from "http"
+import { Config } from "./Config"
 
-app.use("/test-browser", express.static(process.argv[2]))
-app.use("/test", express.static(process.argv[3]))
+let server: Server | undefined
 
-const config: any = require(path.join(process.cwd(), "nbt.json"))
-if (config && config.proxies) {
-    const httpproxy = require("express-http-proxy")
+export function start(config: Config, testFolder: string, tempFolder: string, port = 7777) {
+    const app = express()
 
-    for (const proxy of config.proxies) {
-        app.use(proxy.local, httpproxy(proxy.remote))
+    app.use("/test-browser", express.static(tempFolder))
+    app.use("/test", express.static(testFolder))
+
+    if (config.proxies) {
+        const httpproxy = require("express-http-proxy")
+
+        for (const proxy of config.proxies) {
+            app.use(proxy.local, httpproxy(proxy.remote))
+        }
     }
+
+    server = app.listen(port, () => {})
 }
 
-app.listen(process.env["PORT"] ?? 7777, () => {})
+export function stop() {
+    server?.close()
+}

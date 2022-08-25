@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
-import * as child_process from "child_process"
 import * as path from "path"
-import puppeteer from "puppeteer"
 import { hideBin } from "yargs/helpers"
 import yargs from "yargs/yargs"
+import { Config } from "./Config"
 import generate from "./generate"
 import getPort from "./getPort"
 import { runTests } from "./runTests"
+import * as server from "./server"
 import rimraf = require("rimraf")
 
 async function run() {
@@ -27,13 +27,11 @@ async function run() {
             default: 9515
         }).argv
 
-    const nbt = require(path.join(process.cwd(), args.config))
+    const nbt: Config = require(path.join(process.cwd(), args.config))
     const tempFolder = generate(nbt.runners, nbt.additionalScripts)
     const testFolder = path.resolve(nbt.testFolder)
-    const httpServerProc = child_process.spawn("node", [`${__dirname}/../dist/server.js`, tempFolder, testFolder], {
-        stdio: "inherit",
-        env: { ...process.env, PORT: port.toString() }
-    })
+
+    server.start(nbt, testFolder, tempFolder, port)
 
     let exitCode = 0
     try {
@@ -43,7 +41,7 @@ async function run() {
         console.error(e)
         exitCode = 1
     } finally {
-        httpServerProc.kill("SIGINT")
+        server.stop()
         rimraf.sync(tempFolder)
     }
 
