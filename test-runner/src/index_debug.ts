@@ -1,27 +1,37 @@
 #!/usr/bin/env node
 
-import express from "express"
-import httpproxy from "express-http-proxy"
 import * as path from "path"
-import generate from "./generate"
-const app = express()
+import { Config, Server } from "./util"
 
-const nbt = require(path.join(process.cwd(), "nbt.json"))
-const outputPath = generate(nbt.runners, nbt.additionalScripts)
+const port = 7777
+const config: Config = require(path.join(process.cwd(), "nbt.json"))
+const server = Server.create(config, port).start()
 
-app.use("/test-browser", express.static(outputPath))
-app.use("/test", express.static(path.resolve(nbt.testFolder)))
-
-if (nbt.proxies) {
-    for (const proxy of nbt.proxies) {
-        app.use(proxy.local, httpproxy(proxy.remote))
-    }
-}
-
-const urls = (nbt.runners as Array<any>)
+const urls = (config.runners as Array<any>)
     .map((_runner, index) => `- http://localhost:7777/test-browser/index${index + 1}.html`)
     .join("\n")
 console.log(`Server Started. Open under the following URL's
 ${urls}
 and type "mocha.run()" in the debug console to run the tests.`)
-app.listen(7777, () => {})
+
+const signals = [
+    "SIGHUP",
+    "SIGINT",
+    "SIGQUIT",
+    "SIGILL",
+    "SIGTRAP",
+    "SIGABRT",
+    "SIGBUS",
+    "SIGFPE",
+    "SIGUSR1",
+    "SIGSEGV",
+    "SIGUSR2",
+    "SIGTERM"
+]
+
+for (const signal of signals) {
+    process.on(signal, () => {
+        server.stop()
+        process.exit(0)
+    })
+}
