@@ -7,8 +7,8 @@
     "scripts": {
         "prep": "npm install && tsc",
         "test": "npm run prep && npm run test:node && npm run test:web",
-        "test:node": "mocha -r ts-node/register -r tsconfig-paths/register ./test/test.ts --project ./tsconfig.json --exit",
-        "test:web": "browsertest-runner",
+        "test:node": "TEST_VAR=test mocha -r ts-node/register -r tsconfig-paths/register ./test/test.ts --project ./tsconfig.json --exit",
+        "test:web": "TEST_VAR=test browsertest-runner",
         "test:web:debug": "browsertest-runner-debug"
     },
     "author": "js-soft <julian.koenig@js-soft.com> (https://www.js-soft.com/)",
@@ -18,7 +18,7 @@
     },
     "devDependencies": {
         "@types/mocha": "^9.1.1",
-        "bt-runner": "3.1.0",
+        "bt-runner": "*",
         "ts-node": "^10.9.1",
         "tsconfig-paths": "^4.1.0",
         "typescript": "^4.7.4"

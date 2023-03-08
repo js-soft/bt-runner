@@ -1,0 +1,6 @@
+{
+    "workspaces": [
+        "example",
+        "test-runner"
+    ]
+}
