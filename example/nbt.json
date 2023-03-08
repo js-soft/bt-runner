@@ -3,11 +3,13 @@
     "runners": [
         {
             "dependencies": ["test.js"],
-            "globals": ["TEST", "TEST2"]
+            "globals": ["TEST", "TEST2"],
+            "environment": ["TEST_VAR"]
         },
         {
             "dependencies": ["test.js"],
-            "globals": ["TEST", "TEST2"]
+            "globals": ["TEST", "TEST2"],
+            "environment": ["TEST_VAR"]
         }
     ],
     "additionalScripts": ["window.TEST = {}", "window.TEST2 = {}"]
