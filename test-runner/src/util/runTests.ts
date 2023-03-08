@@ -24,6 +24,17 @@ export async function runTests(serverPort: number, testRunners: IRunner[]) {
 
         await page.goto(`http://localhost:${serverPort}/test-browser/index${runnerNumber}.html`)
 
+        const environment = runner.environment ?? []
+
+        for (const key of environment) {
+            const value = process.env[key]
+            if (value == null) {
+                throw new Error(`Required environment variable '${key}' not set. Aborting...`)
+            }
+
+            await page.evaluate((params: any) => (globalThis[params.key] = params.value), { key, value })
+        }
+
         const globals = runner.globals ?? []
         globals.push("mocha")
 

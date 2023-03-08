@@ -13,4 +13,5 @@ export interface IProxy {
 export interface IRunner {
     dependencies: string[]
     globals?: string[]
+    environment?: string[]
 }
