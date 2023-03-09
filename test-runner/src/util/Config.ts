@@ -5,16 +5,9 @@ export interface Config {
     additionalScripts?: string[]
 }
 
-export type IProxy = IProxyStrict | IProxyFromEnv
-
-export interface IProxyStrict {
+export interface IProxy {
     local: string
     remote: string
-}
-
-export interface IProxyFromEnv {
-    local: string
-    env: string
 }
 
 export interface IRunner {

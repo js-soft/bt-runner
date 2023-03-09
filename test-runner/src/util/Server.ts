@@ -1,7 +1,7 @@
 import express from "express"
 import { Server as HttpServer } from "http"
 import * as path from "path"
-import { Config, IProxy, IProxyStrict } from "./Config"
+import { Config, IProxy } from "./Config"
 import { generateHtml } from "./generateHtml"
 
 export class Server {
@@ -42,13 +42,25 @@ export class Server {
         return this
     }
 
-    private transformProxy(proxy: IProxy): IProxyStrict {
-        if ("remote" in proxy) return proxy
+    private transformProxy(proxy: IProxy): IProxy {
+        let remote = proxy.remote
 
-        const remoteFromEnv = process.env[proxy.env]
-        if (!remoteFromEnv) throw new Error(`No environment variable found for proxy: ${proxy.env}`)
+        const regex = /{{([a-z_]+)}}/i
+        while (regex.test(remote)) {
+            const match = regex.exec(remote)
 
-        return { local: proxy.local, remote: remoteFromEnv }
+            if (match) {
+                const envVar = match[1]
+                const envValue = process.env[envVar]
+
+                console.log(envValue)
+
+                if (!envValue) throw new Error(`Environment variable ${envVar} is not defined`)
+                remote = remote.replace(match[0], envValue)
+            }
+        }
+
+        return { local: proxy.local, remote }
     }
 
     public stop() {
