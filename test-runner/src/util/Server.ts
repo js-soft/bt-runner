@@ -1,7 +1,7 @@
 import express from "express"
 import { Server as HttpServer } from "http"
 import * as path from "path"
-import { Config } from "./Config"
+import { Config, IProxy, IProxyStrict } from "./Config"
 import { generateHtml } from "./generateHtml"
 
 export class Server {
@@ -31,7 +31,8 @@ export class Server {
         if (this.config.proxies) {
             const httpproxy = require("express-http-proxy")
 
-            for (const proxy of this.config.proxies) {
+            const proxies = this.config.proxies.map((proxy) => this.transformProxy(proxy))
+            for (const proxy of proxies) {
                 app.use(proxy.local, httpproxy(proxy.remote))
             }
         }
@@ -39,6 +40,15 @@ export class Server {
         this.server = app.listen(this.port, () => {})
 
         return this
+    }
+
+    private transformProxy(proxy: IProxy): IProxyStrict {
+        if ("remote" in proxy) return proxy
+
+        const remoteFromEnv = process.env[proxy.env]
+        if (!remoteFromEnv) throw new Error(`No environment variable found for proxy: ${proxy.env}`)
+
+        return { local: proxy.local, remote: remoteFromEnv }
     }
 
     public stop() {
