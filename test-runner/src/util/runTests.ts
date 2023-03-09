@@ -1,9 +1,9 @@
 import puppeteer from "puppeteer"
 import { IRunner } from "./Config"
 
-export async function runTests(serverPort: number, testRunners: IRunner[]) {
+export async function runTests(serverPort: number, testRunners: IRunner[], debug: boolean) {
     const browser = await puppeteer.launch({
-        headless: true,
+        headless: !debug,
         args: ["--disable-gpu", "--disable-dev-shm-usage", "--disable-setuid-sandbox", "--no-sandbox"]
     })
 
@@ -33,6 +33,10 @@ export async function runTests(serverPort: number, testRunners: IRunner[]) {
             globalThis.process.env = { ...globalThis.process.env, ...params }
         }, process.env)
 
+        for (const dependency of runner.dependencies) {
+            await page.addScriptTag({ url: `/test/${dependency}` })
+        }
+
         const globals = runner.globals ?? []
         globals.push("mocha")
 
@@ -50,6 +54,11 @@ export async function runTests(serverPort: number, testRunners: IRunner[]) {
                 })
             )
         }, runner.globals ?? [])
+
+        if (debug) {
+            console.log("Press any key to continue...")
+            await new Promise((resolve) => process.stdin.once("data", resolve))
+        }
 
         if (result.failures != 0) {
             await browser.close()

@@ -18,8 +18,6 @@ export function generateHtml(dependencies: string[], additionalScripts?: string[
             ${additionalScripts ? additionalScripts.join("\n") : ""}
         </script>
         
-        ${dependencies.map((dependency) => `        <script src="/test/${dependency}"></script>`).join("\n")}
-
         <div id="main">Test</div>
     </body>
 </html>`
