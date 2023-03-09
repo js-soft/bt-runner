@@ -24,18 +24,13 @@ export async function runTests(serverPort: number, testRunners: IRunner[]) {
 
         await page.goto(`http://localhost:${serverPort}/test-browser/index${runnerNumber}.html`)
 
-        const environment = runner.environment ?? []
-
-        const matchingEnvVars = Object.entries(process.env).filter(([key]) => environment.includes(key))
-        const newProcessEnv = Object.fromEntries(matchingEnvVars)
-
         await page.evaluate((params: any) => {
             // @ts-expect-error
             globalThis.process = globalThis.process ?? {}
             globalThis.process.env = globalThis.process.env ?? {}
 
             globalThis.process.env = { ...globalThis.process.env, ...params }
-        }, newProcessEnv)
+        }, process.env)
 
         const globals = runner.globals ?? []
         globals.push("mocha")
