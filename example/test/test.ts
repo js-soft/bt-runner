@@ -13,3 +13,9 @@ describe("Long running tests", function () {
         await sleep(3000)
     }).timeout(7000)
 })
+
+describe("env var mounting", function () {
+    it("should mount env vars", async function () {
+        if (process.env.TEST_VAR != "test") throw new Error("TEST_VAR is not set to 'test'")
+    })
+})

@@ -24,6 +24,15 @@ export async function runTests(serverPort: number, testRunners: IRunner[]) {
 
         await page.goto(`http://localhost:${serverPort}/test-browser/index${runnerNumber}.html`)
 
+        // patch all process.env variables into the browsers "process.env"
+        await page.evaluate((params: any) => {
+            // @ts-expect-error
+            globalThis.process = globalThis.process ?? {}
+            globalThis.process.env = globalThis.process.env ?? {}
+
+            globalThis.process.env = { ...globalThis.process.env, ...params }
+        }, process.env)
+
         const globals = runner.globals ?? []
         globals.push("mocha")
 
