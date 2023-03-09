@@ -26,14 +26,16 @@ export async function runTests(serverPort: number, testRunners: IRunner[]) {
 
         const environment = runner.environment ?? []
 
-        for (const key of environment) {
-            const value = process.env[key]
-            if (value == null) {
-                throw new Error(`Required environment variable '${key}' not set. Aborting...`)
-            }
+        const matchingEnvVars = Object.entries(process.env).filter(([key]) => environment.includes(key))
+        const newProcessEnv = Object.fromEntries(matchingEnvVars)
 
-            await page.evaluate((params: any) => (globalThis[params.key] = params.value), { key, value })
-        }
+        await page.evaluate((params: any) => {
+            // @ts-expect-error
+            globalThis.process = globalThis.process ?? {}
+            globalThis.process.env = globalThis.process.env ?? {}
+
+            globalThis.process.env = { ...globalThis.process.env, ...params }
+        }, newProcessEnv)
 
         const globals = runner.globals ?? []
         globals.push("mocha")
