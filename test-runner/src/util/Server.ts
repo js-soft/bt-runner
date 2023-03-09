@@ -53,8 +53,6 @@ export class Server {
                 const envVar = match[1]
                 const envValue = process.env[envVar]
 
-                console.log(envValue)
-
                 if (!envValue) throw new Error(`Environment variable ${envVar} is not defined`)
                 remote = remote.replace(match[0], envValue)
             }
