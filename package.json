@@ -2,12 +2,9 @@
     "name": "bt-runner",
     "version": "4.0.1",
     "description": "",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/js-soft/docker-node-browsertests"
-    },
-    "license": "ISC",
-    "author": "js-soft <julian.koenig@js-soft.com> (https://www.js-soft.com/)",
+    "repository": "github:js-soft/bt-runner",
+    "license": "MIT",
+    "author": "js-soft GmbH (https://www.js-soft.com/)",
     "main": "index.js",
     "bin": {
         "browsertest-runner": "dist/index.js"
