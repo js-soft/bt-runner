@@ -39,4 +39,7 @@ async function run() {
     process.exit(exitCode)
 }
 
-run()
+run().catch((e) => {
+    console.error(e)
+    process.exit(1)
+})

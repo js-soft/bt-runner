@@ -8,8 +8,8 @@ export function generateHtml(dependencies: string[], additionalScripts?: string[
     <body>
         <div id="mocha"></div>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/10.0.0/mocha.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/4.3.6/chai.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/10.2.0/mocha.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/4.3.7/chai.min.js"></script>
         <script>
             mocha.setup("bdd")
             mocha.reporter("spec")

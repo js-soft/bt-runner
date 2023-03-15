@@ -37,7 +37,7 @@ export class Server {
             }
         }
 
-        this.server = app.listen(this.port, () => {})
+        this.server = app.listen(this.port)
 
         return this
     }
@@ -61,7 +61,7 @@ export class Server {
         return { local: proxy.local, remote }
     }
 
-    public stop() {
+    public stop(): void {
         this.server?.close()
     }
 }
