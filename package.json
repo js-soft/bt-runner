@@ -20,7 +20,12 @@
         "example"
     ],
     "scripts": {
-        "prepublishOnly": "tsc"
+        "build": "tsc",
+        "lint": "npm run lint:prettier && npm run lint:eslint && npm run lint:tsc",
+        "lint:eslint": "eslint --ext ts ./src",
+        "lint:prettier": "prettier --check .",
+        "lint:tsc": "tsc --noEmit",
+        "test": "npm run test --workspace example"
     },
     "dependencies": {
         "express": "^4.18.2",
@@ -29,10 +34,12 @@
         "yargs": "^17.7.1"
     },
     "devDependencies": {
+        "@js-soft/eslint-config-ts": "^1.6.2",
         "@types/express": "^4.17.17",
         "@types/express-http-proxy": "^1.6.3",
         "@types/node": "^18.14.6",
         "@types/yargs": "^17.0.22",
+        "eslint": "^8.36.0",
         "prettier": "^2.8.4"
     },
     "publishConfig": {

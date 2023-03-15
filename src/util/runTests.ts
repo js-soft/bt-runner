@@ -1,7 +1,7 @@
 import puppeteer from "puppeteer"
 import { IRunner } from "./Config"
 
-export async function runTests(serverPort: number, testRunners: IRunner[], debug: boolean) {
+export async function runTests(serverPort: number, testRunners: IRunner[], debug: boolean): Promise<boolean> {
     const browser = await puppeteer.launch({
         headless: !debug,
         args: ["--disable-gpu", "--disable-dev-shm-usage", "--disable-setuid-sandbox", "--no-sandbox"]
@@ -26,9 +26,8 @@ export async function runTests(serverPort: number, testRunners: IRunner[], debug
 
         // patch all process.env variables into the browsers "process.env"
         await page.evaluate((params: any) => {
-            // @ts-expect-error
-            globalThis.process = globalThis.process ?? {}
-            globalThis.process.env = globalThis.process.env ?? {}
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            globalThis.process = globalThis.process ?? { env: {} }
 
             globalThis.process.env = { ...globalThis.process.env, ...params }
         }, process.env)
@@ -48,7 +47,7 @@ export async function runTests(serverPort: number, testRunners: IRunner[], debug
                 }
             }
 
-            return new Promise<{ failures: number }>((resolve) =>
+            return await new Promise<{ failures: number }>((resolve) =>
                 (window as any).mocha.run(function (failures: number) {
                     resolve({ failures: failures })
                 })
@@ -57,10 +56,11 @@ export async function runTests(serverPort: number, testRunners: IRunner[], debug
 
         if (debug) {
             console.log("Press any key to continue...")
+            // eslint-disable-next-line no-loop-func
             await new Promise((resolve) => process.stdin.once("data", resolve))
         }
 
-        if (result.failures != 0) {
+        if (result.failures !== 0) {
             await browser.close()
             return false
         }

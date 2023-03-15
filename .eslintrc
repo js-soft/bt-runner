@@ -1,0 +1,10 @@
+{
+    "ignorePatterns": ["/*", "!/src"],
+    "extends": ["@js-soft/ts"],
+    "parserOptions": { "project": ["./tsconfig.json"] },
+    "rules": {
+        "@typescript-eslint/no-require-imports": "off",
+        "no-console": "off",
+        "prefer-spread": "off"
+    }
+}

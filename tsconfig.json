@@ -4,6 +4,7 @@
         "target": "ES2021",
         "outDir": "dist",
         "esModuleInterop": true,
-        "module": "CommonJS"
+        "module": "CommonJS",
+        "strictNullChecks": true
     }
 }
