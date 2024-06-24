@@ -40,6 +40,11 @@
         "eslint": "^8.36.0",
         "prettier": "^2.8.4"
     },
+    "overrides": {
+        "puppeteer": {
+            "ws": "8.17.1"
+        }
+    },
     "publishConfig": {
         "access": "public"
     }
