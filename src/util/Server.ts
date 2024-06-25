@@ -8,7 +8,10 @@ export class Server {
     private readonly testFolder: string
     private server: HttpServer | undefined
 
-    private constructor(private readonly config: Config, private readonly port: number) {
+    private constructor(
+        private readonly config: Config,
+        private readonly port: number
+    ) {
         this.testFolder = path.resolve(config.testFolder)
     }
 
