@@ -56,7 +56,6 @@ export async function runTests(serverPort: number, testRunners: IRunner[], debug
 
         if (debug) {
             console.log("Press any key to continue...")
-            // eslint-disable-next-line no-loop-func
             await new Promise((resolve) => process.stdin.once("data", resolve))
         }
 
