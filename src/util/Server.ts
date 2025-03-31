@@ -22,9 +22,9 @@ export class Server {
     public start(): this {
         const app = express()
 
-        this.config.runners.forEach((runner, i) => {
+        this.config.runners.forEach((_, i) => {
             app.get(`/test-browser/index${i + 1}.html`, (_req, res) => {
-                const html = generateHtml(runner.dependencies, this.config.additionalScripts)
+                const html = generateHtml(this.config.additionalScripts)
                 res.status(200).send(html)
             })
         })

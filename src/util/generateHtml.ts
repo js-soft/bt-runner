@@ -1,4 +1,4 @@
-export function generateHtml(dependencies: string[], additionalScripts?: string[]): string {
+export function generateHtml(additionalScripts?: string[]): string {
     return `<!DOCTYPE html>
 <html>
     <head>

@@ -1,6 +1,6 @@
 {
     "name": "bt-runner",
-    "version": "4.0.5",
+    "version": "4.0.6",
     "description": "",
     "repository": "github:js-soft/bt-runner",
     "license": "MIT",
@@ -25,20 +25,20 @@
         "test": "npm run test --workspace example"
     },
     "dependencies": {
-        "express": "^4.21.0",
+        "express": "^4.21.2",
         "express-http-proxy": "^2.1.1",
-        "puppeteer": "^23.4.1",
+        "puppeteer": "^24.4.0",
         "yargs": "^17.7.2"
     },
     "devDependencies": {
-        "@js-soft/eslint-config-ts": "^1.6.9",
+        "@js-soft/eslint-config-ts": "^1.6.14",
         "@js-soft/license-check": "^1.0.9",
-        "@types/express": "^5.0.0",
+        "@types/express": "^5.0.1",
         "@types/express-http-proxy": "^1.6.6",
-        "@types/node": "^22.7.4",
+        "@types/node": "^22.13.14",
         "@types/yargs": "^17.0.33",
         "eslint": "^8.36.0",
-        "prettier": "^3.3.3"
+        "prettier": "^3.5.3"
     },
     "publishConfig": {
         "access": "public"
