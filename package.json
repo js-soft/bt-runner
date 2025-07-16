@@ -25,20 +25,20 @@
         "test": "npm run test --workspace example"
     },
     "dependencies": {
-        "express": "^4.21.2",
+        "express": "^5.1.0",
         "express-http-proxy": "^2.1.1",
-        "puppeteer": "^24.4.0",
-        "yargs": "^17.7.2"
+        "puppeteer": "^24.13.0",
+        "yargs": "^18.0.0"
     },
     "devDependencies": {
-        "@js-soft/eslint-config-ts": "^1.6.14",
+        "@js-soft/eslint-config-ts": "^2.0.1",
         "@js-soft/license-check": "^1.0.9",
-        "@types/express": "^5.0.1",
+        "@types/express": "^5.0.3",
         "@types/express-http-proxy": "^1.6.6",
-        "@types/node": "^22.13.14",
+        "@types/node": "^24.0.14",
         "@types/yargs": "^17.0.33",
-        "eslint": "^8.36.0",
-        "prettier": "^3.5.3"
+        "eslint": "^9.31.0",
+        "prettier": "^3.6.2"
     },
     "publishConfig": {
         "access": "public"
