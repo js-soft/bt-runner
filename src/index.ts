@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import * as fs from "fs"
 import * as path from "path"
 import { hideBin } from "yargs/helpers"
 import yargs from "yargs/yargs"
@@ -22,7 +23,7 @@ async function run() {
             default: false
         }).argv
 
-    const config: Config = require(path.join(process.cwd(), args.config))
+    const config: Config = JSON.parse(fs.readFileSync(path.join(process.cwd(), args.config), "utf8"))
     const server = Server.create(config, port).start()
 
     let exitCode = 0
