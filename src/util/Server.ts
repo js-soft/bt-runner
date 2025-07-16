@@ -1,4 +1,5 @@
 import express from "express"
+import httpProxy from "express-http-proxy"
 import { Server as HttpServer } from "http"
 import * as path from "path"
 import { Config, IProxy } from "./Config"
@@ -32,11 +33,9 @@ export class Server {
         app.use("/test", express.static(this.testFolder))
 
         if (this.config.proxies) {
-            const httpproxy = require("express-http-proxy")
-
             const proxies = this.config.proxies.map((proxy) => this.transformProxy(proxy))
             for (const proxy of proxies) {
-                app.use(proxy.local, httpproxy(proxy.remote))
+                app.use(proxy.local, httpProxy(proxy.remote))
             }
         }
 

@@ -8,13 +8,7 @@ export async function runTests(serverPort: number, testRunners: IRunner[], debug
     })
 
     const page = await browser.newPage()
-
-    page.on("console", (message) => {
-        console.log.apply(
-            console,
-            message.args().map((arg) => arg.remoteObject().value)
-        )
-    })
+    page.on("console", (message) => console.log(...message.args().map((arg) => arg.remoteObject().value)))
 
     for (let i = 0; i < testRunners.length; i++) {
         const runner = testRunners[i]
