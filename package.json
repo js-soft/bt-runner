@@ -19,7 +19,7 @@
     "scripts": {
         "build": "tsc",
         "lint": "npm run lint:prettier && npm run lint:eslint && npm run lint:tsc",
-        "lint:eslint": "eslint --ext ts ./src",
+        "lint:eslint": "eslint",
         "lint:prettier": "prettier --check .",
         "lint:tsc": "tsc --noEmit",
         "test": "npm run test --workspace example"

@@ -5,14 +5,15 @@ import { globalIgnores } from "eslint/config"
 import tseslint from "typescript-eslint"
 
 export default tseslint.config(globalIgnores(["**/dist", "**/node_modules"]), {
-    extends: [configs.base],
+    extends: [configs.base, configs.mocha],
     languageOptions: {
         parserOptions: {
-            project: ["./tsconfig.json"]
+            project: ["./tsconfig.json", "example/tsconfig.json"]
         }
     },
     files: ["**/*.ts"],
     rules: {
-        "no-console": "off"
+        "no-console": "off",
+        "jest/expect-expect": "off"
     }
 })
