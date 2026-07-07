@@ -1,10 +1,9 @@
 {
     "name": "bt-runner",
-    "version": "4.0.10",
     "description": "",
     "repository": "github:js-soft/bt-runner",
     "license": "MIT",
-    "author": "js-soft GmbH (https://www.js-soft.com/)",
+    "author": "js-soft AG (https://www.js-soft.com/)",
     "main": "index.js",
     "bin": {
         "browsertest-runner": "dist/index.js"
