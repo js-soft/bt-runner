@@ -1,0 +1,37 @@
+name: Weekly Dependency Release
+
+on:
+  schedule:
+    - cron: "0 2 * * 2" # every Tuesday at 02:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: weekly-dependency-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+
+      - name: Check dependency-only changes
+        id: prepare
+        uses: ./.github/actions/prepare-weekly-dependency-release
+        with:
+          github-token: ${{ github.token }}
+          branch: main
+
+      - name: Create GitHub release
+        if: steps.prepare.outputs.should_release == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.prepare.outputs.next_tag }}
+          name: ${{ steps.prepare.outputs.next_tag }}
+          target_commitish: main
+          generate_release_notes: true
