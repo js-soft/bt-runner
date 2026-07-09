@@ -16,10 +16,10 @@
         "mocha": "^11.7.4"
     },
     "devDependencies": {
-        "@types/mocha": "^10.0.10",
-        "bt-runner": "*",
-        "ts-node": "^10.9.2",
-        "tsconfig-paths": "^4.2.0",
-        "typescript": "^5.9.3"
+        "@types/mocha": "10.0.10",
+        "bt-runner": "4.0.11",
+        "ts-node": "10.9.2",
+        "tsconfig-paths": "4.2.0",
+        "typescript": "5.9.3"
     }
 }
