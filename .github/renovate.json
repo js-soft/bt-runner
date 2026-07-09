@@ -5,7 +5,8 @@
     "packageRules": [
         {
             "matchPackageNames": ["bt-runner"],
-            "matchDatasources": ["npm"]
+            "matchDatasources": ["npm"],
+            "enabled": false
         }
     ]
 }

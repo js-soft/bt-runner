@@ -30,12 +30,13 @@ export async function runTests(serverPort: number, testRunners: IRunner[], debug
             await page.addScriptTag({ url: `/test/${dependency}` })
         }
 
-        const globals = runner.globals ?? []
-        globals.push("mocha")
+        const globals = [...(runner.globals ?? []), "mocha"]
 
         const result = await page.evaluate(async (globals) => {
+            const browserGlobals = window as unknown as Record<string, unknown>
+
             for (const glob of globals) {
-                if (typeof window[glob] === "undefined") {
+                if (typeof browserGlobals[glob] === "undefined") {
                     console.log(`Required library '${glob}' not loaded. Aborting...`)
                     return { failures: 1 }
                 }
@@ -46,7 +47,7 @@ export async function runTests(serverPort: number, testRunners: IRunner[], debug
                     resolve({ failures: failures })
                 })
             )
-        }, runner.globals ?? [])
+        }, globals)
 
         if (debug) {
             console.log("Press any key to continue...")
