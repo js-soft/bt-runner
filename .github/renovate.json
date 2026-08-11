@@ -1,7 +1,7 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "extends": ["github>js-soft/renovate-config"],
-    "reviewers": ["Milena-Czierlinski", "britsta"],
+    "reviewers": ["team:npm-dependency-update-reviewers"],
     "packageRules": [
         {
             "matchPackageNames": ["bt-runner"],
