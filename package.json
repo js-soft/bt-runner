@@ -30,7 +30,7 @@
         "yargs": "^18.0.0"
     },
     "devDependencies": {
-        "@js-soft/eslint-config-ts": "2.0.9",
+        "@js-soft/eslint-config-ts": "2.0.10",
         "@js-soft/license-check": "1.0.14",
         "@types/express": "5.0.6",
         "@types/express-http-proxy": "1.6.7",
